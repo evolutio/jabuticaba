@@ -110,6 +110,15 @@ function dkup {
     return $exitcode
 }
 
+function dkrun_prod {
+    docker stop jabuticaba
+    docker rm jabuticaba
+    docker run --name jabuticaba -d --env-file /home/ubuntu/jabuticaba.en \
+        -p 3000:3000 -p 8000:8000 \
+        -v /home/ubuntu/dkdata/jabuticaba:/dkdata \
+        jabuticaba start_web.sh
+}
+
 function dk {
     docker exec -it jabuticaba $@
 }
