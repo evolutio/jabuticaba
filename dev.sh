@@ -42,6 +42,10 @@ function devhelp {
     echo -e "                  Example:"
     echo -e "                   dk ${RED}bash${RESTORE}"
     echo -e ""
+    echo -e "${GREEN}dkrun_prod${RESTORE}        Starts the project in production mode"
+    echo -e ""
+    echo -e "${GREEN}deploy_prod${RESTORE}       Connects to the production server and deploys it"
+    echo -e ""
     echo -e "${GREEN}dkpgnginx${RESTORE}         Starts dockerized ${RED}nginx and postgres${RESTORE}"
     echo -e ""
 }
@@ -117,6 +121,17 @@ function dkrun_prod {
         -p 3000:3000 -p 8000:8000 \
         -v /home/ubuntu/dkdata/jabuticaba:/dkdata \
         jabuticaba start_web.sh
+}
+
+function deploy_prod {
+  ssh ubuntu@jabuticaba.evolutio.io "
+    cd ~/jabuticaba
+    git reset --hard
+    git pull
+    source dev.sh
+    dkbuild
+    dkrun_prod
+  "
 }
 
 function dk {
